@@ -48,6 +48,14 @@ class StopWatchViewModel: ViewModel() {
             .launchIn(viewModelScope)
     }
 
+    fun toggleIsRunning() {
+        when(timerState.value) {
+            TimerState.RUNNING -> _timerState.update { TimerState.PAUSED }
+            TimerState.PAUSED,
+            TimerState.RESET -> _timerState.update { TimerState.PAUSED }
+        }
+    }
+
     private fun getTimerFlow(isRunning: Boolean): Flow<Long> {
         return flow {
             var startMillis = System.currentTimeMillis()

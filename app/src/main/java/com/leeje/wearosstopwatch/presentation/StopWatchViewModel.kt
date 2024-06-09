@@ -52,7 +52,7 @@ class StopWatchViewModel: ViewModel() {
         when(timerState.value) {
             TimerState.RUNNING -> _timerState.update { TimerState.PAUSED }
             TimerState.PAUSED,
-            TimerState.RESET -> _timerState.update { TimerState.PAUSED }
+            TimerState.RESET -> _timerState.update { TimerState.RUNNING }
         }
     }
 

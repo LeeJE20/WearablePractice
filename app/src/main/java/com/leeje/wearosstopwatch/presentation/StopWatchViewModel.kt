@@ -10,8 +10,11 @@ import kotlinx.coroutines.flow.WhileSubscribed
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
@@ -31,6 +34,7 @@ class StopWatchViewModel: ViewModel() {
             "00:00:00:000"
         )
 
+
     init {
         _timerState
             .flatMapLatest { timerState ->
@@ -38,6 +42,10 @@ class StopWatchViewModel: ViewModel() {
                     isRunning = timerState == TimerState.RUNNING
                 )
             }
+            .onEach { timeDiff ->
+                _elapsedTime.update { it + timeDiff }
+            }
+            .launchIn(viewModelScope)
     }
 
     private fun getTimerFlow(isRunning: Boolean): Flow<Long> {

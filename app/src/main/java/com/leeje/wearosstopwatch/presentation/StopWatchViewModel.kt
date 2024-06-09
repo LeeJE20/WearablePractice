@@ -56,6 +56,11 @@ class StopWatchViewModel: ViewModel() {
         }
     }
 
+    fun resetTimer() {
+        _timerState.update { TimerState.RESET }
+        _elapsedTime.update { 0L }
+    }
+
     private fun getTimerFlow(isRunning: Boolean): Flow<Long> {
         return flow {
             var startMillis = System.currentTimeMillis()

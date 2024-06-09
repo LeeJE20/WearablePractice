@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.WhileSubscribed
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -29,6 +30,15 @@ class StopWatchViewModel: ViewModel() {
             SharingStarted.WhileSubscribed(5000),
             "00:00:00:000"
         )
+
+    init {
+        _timerState
+            .flatMapLatest { timerState ->
+                getTimerFlow(
+                    isRunning = timerState == TimerState.RUNNING
+                )
+            }
+    }
 
     private fun getTimerFlow(isRunning: Boolean): Flow<Long> {
         return flow {
